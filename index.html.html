@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>드라이브온 렌터카 | DriveOn Rental</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#0A1628;--navy-mid:#112040;--navy-light:#1A3260;
+  --gold:#C9A84C;--gold-light:#E8C97A;
+  --cream:#FAF7F2;--white:#fff;
+  --text-main:#0A1628;--text-soft:#4A5568;--text-muted:#718096;
+  --border:#E2DED6;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans','Noto Sans KR',sans-serif;background:var(--cream);color:var(--text-main);overflow-x:hidden}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:0 44px;height:66px;border-bottom:1px solid rgba(201,168,76,.2)}
+.logo{font-family:'DM Serif Display',serif;font-size:22px;color:var(--gold);display:flex;align-items:center;gap:10px;text-decoration:none;letter-spacing:.3px}
+.logo-icon{width:36px;height:36px;background:var(--gold);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:19px}
+.nav-right{display:flex;gap:6px}
+.lang-btn{border:1px solid rgba(201,168,76,.28);background:transparent;color:rgba(255,255,255,.55);font-family:'DM Sans','Noto Sans KR',sans-serif;font-size:12px;font-weight:500;padding:6px 13px;border-radius:20px;cursor:pointer;transition:all .2s;letter-spacing:.2px}
+.lang-btn:hover{color:#fff;border-color:var(--gold)}
+.lang-btn.active{background:var(--gold);color:var(--navy);border-color:var(--gold);font-weight:700}
+
+/* HERO */
+.hero{position:relative;background:var(--navy);min-height:460px;display:flex;align-items:center;overflow:hidden;padding:80px 44px}
+.hero::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=1600&q=70')center/cover;opacity:.1}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(transparent,var(--navy))}
+.hero-content{position:relative;z-index:2;max-width:600px}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.3);color:var(--gold-light);font-size:11px;font-weight:600;padding:5px 14px;border-radius:20px;letter-spacing:1.1px;text-transform:uppercase;margin-bottom:20px}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(28px,4.5vw,48px);color:#fff;line-height:1.15;margin-bottom:14px}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-sub{font-size:15px;color:rgba(255,255,255,.52);line-height:1.75;margin-bottom:34px;max-width:460px}
+.hero-stats{display:flex;gap:36px;flex-wrap:wrap}
+.stat-num{font-family:'DM Serif Display',serif;font-size:27px;color:var(--gold);line-height:1}
+.stat-label{font-size:10.5px;color:rgba(255,255,255,.42);text-transform:uppercase;letter-spacing:.9px;margin-top:4px}
+
+/* TABS */
+.tabs-bar{background:var(--white);border-bottom:1px solid var(--border);padding:0 44px;display:flex;position:sticky;top:66px;z-index:90}
+.tab-btn{display:flex;align-items:center;gap:7px;padding:15px 20px;font-size:13px;font-weight:500;color:var(--text-muted);border:none;background:transparent;cursor:pointer;border-bottom:2.5px solid transparent;transition:all .2s;white-space:nowrap;font-family:'DM Sans','Noto Sans KR',sans-serif}
+.tab-btn:hover{color:var(--navy)}
+.tab-btn.active{color:var(--navy);border-bottom-color:var(--gold)}
+
+/* CAT HEADER */
+.cat-header{padding:52px 44px 0;max-width:1280px;margin:0 auto}
+.cat-rule{display:flex;align-items:center;gap:14px}
+.cat-rule::after{content:'';flex:1;height:1px;background:var(--border)}
+.cat-label{font-size:10px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--gold);white-space:nowrap}
+
+/* GRID */
+.grid{padding:20px 44px 12px;max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:28px}
+
+/* CARD */
+.card{background:var(--white);border-radius:18px;overflow:hidden;border:1px solid var(--border);transition:transform .3s,box-shadow .3s;display:flex;flex-direction:column}
+.card:hover{transform:translateY(-7px);box-shadow:0 18px 52px rgba(10,22,40,.17)}
+
+/* IMAGE AREA */
+.card-photo{position:relative;height:230px;overflow:hidden;background:#EDEAE4}
+.card-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .55s ease;opacity:0;transition:opacity .4s,transform .55s ease}
+.card-photo img.loaded{opacity:1}
+.card:hover .card-photo img{transform:scale(1.05)}
+.photo-shimmer{position:absolute;inset:0;background:linear-gradient(90deg,#EDEAE4 0%,#E0DDD7 50%,#EDEAE4 100%);background-size:200% 100%;animation:shimmer 1.4s infinite}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:-100% 0}}
+.photo-error-msg{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:#EDEAE4;color:var(--text-muted);font-size:13px;text-align:center;padding:16px}
+.photo-error-msg .car-emoji{font-size:40px}
+
+.badge{position:absolute;top:14px;left:14px;font-size:9.5px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;padding:4px 10px;border-radius:6px}
+.badge-sedan{background:var(--navy);color:var(--gold)}
+.badge-van{background:rgba(20,44,90,.9);color:#fff}
+.badge-cargo{background:var(--gold);color:var(--navy)}
+.badge-premium{background:var(--navy);color:var(--gold)}
+.rating-pill{position:absolute;top:14px;right:14px;background:rgba(10,22,40,.8);color:#fff;font-size:13px;font-weight:600;padding:5px 10px;border-radius:8px;display:flex;align-items:center;gap:3px}
+.star{color:#FFD700;font-size:13px}
+
+/* BODY */
+.card-body{padding:22px 24px;flex:1;display:flex;flex-direction:column}
+.review-row{display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.stars{color:#FFD700;font-size:13px;letter-spacing:1px}
+.review-ct{font-size:12px;color:var(--text-muted)}
+.car-name{font-family:'DM Serif Display',serif;font-size:22px;color:var(--navy);line-height:1.15;margin-bottom:3px}
+.car-sub{font-size:12px;color:var(--text-muted);margin-bottom:11px;letter-spacing:.1px}
+.car-desc{font-size:13.5px;color:var(--text-soft);line-height:1.72;flex:1;margin-bottom:15px}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:17px}
+.chip{background:var(--cream);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text-soft);padding:4px 10px;font-weight:500;white-space:nowrap}
+.card-foot{display:flex;align-items:center;justify-content:space-between;padding-top:15px;border-top:1px solid var(--border)}
+.price-lbl{font-size:9.5px;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);font-weight:600;margin-bottom:2px}
+.price-val{font-family:'DM Serif Display',serif;font-size:22px;color:var(--navy);line-height:1}
+.price-unit{font-size:11px;color:var(--text-muted);font-family:'DM Sans',sans-serif}
+.book-btn{background:var(--navy);color:#fff;border:none;border-radius:10px;padding:11px 19px;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans','Noto Sans KR',sans-serif;display:flex;align-items:center;gap:5px;transition:all .2s;white-space:nowrap}
+.book-btn:hover{background:var(--navy-light);transform:scale(1.04)}
+
+/* FEATURES */
+.features{background:var(--navy);padding:62px 44px;margin-top:56px}
+.features-grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:36px}
+.feat{display:flex;flex-direction:column;align-items:center;text-align:center;gap:11px}
+.feat-icon{width:52px;height:52px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.22);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.feat-title{font-size:14px;font-weight:600;color:#fff}
+.feat-desc{font-size:12px;color:rgba(255,255,255,.42);line-height:1.65}
+
+/* FOOTER */
+footer{background:var(--navy-mid);border-top:1px solid rgba(201,168,76,.1);padding:48px 44px 28px}
+.footer-inner{max-width:1280px;margin:0 auto}
+.footer-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:28px;margin-bottom:36px}
+.footer-brand{font-family:'DM Serif Display',serif;font-size:22px;color:var(--gold);margin-bottom:8px}
+.footer-tagline{font-size:13px;color:rgba(255,255,255,.32);max-width:240px;line-height:1.7}
+.footer-contact h4{font-size:10px;text-transform:uppercase;letter-spacing:1.3px;color:var(--gold);margin-bottom:12px;font-weight:700}
+.contact-row{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.5);font-size:13px;margin-bottom:7px}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.07);padding-top:20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.footer-copy{font-size:11px;color:rgba(255,255,255,.22)}
+.footer-links{display:flex;gap:18px}
+.footer-links a{font-size:11px;color:rgba(255,255,255,.22);text-decoration:none}
+.footer-links a:hover{color:var(--gold)}
+
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.68);z-index:500;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .25s}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--white);border-radius:20px;width:100%;max-width:540px;overflow:hidden;transform:translateY(20px);transition:transform .3s}
+.overlay.open .modal{transform:translateY(0)}
+.modal-head{background:var(--navy);padding:22px 26px;display:flex;justify-content:space-between;align-items:center}
+.modal-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--gold)}
+.modal-x{width:30px;height:30px;background:rgba(255,255,255,.1);border:none;border-radius:7px;color:#fff;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center}
+.modal-x:hover{background:rgba(255,255,255,.2)}
+.modal-body{padding:26px}
+.modal-img{width:100%;height:190px;object-fit:cover;border-radius:11px;margin-bottom:18px;background:#EDEAE4}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}
+.info-cell{background:var(--cream);border-radius:10px;padding:11px 13px}
+.info-lbl{font-size:9.5px;text-transform:uppercase;letter-spacing:.9px;color:var(--text-muted);font-weight:700;margin-bottom:3px}
+.info-val{font-size:14px;font-weight:600;color:var(--navy)}
+.confirm-btn{width:100%;background:var(--navy);color:#fff;border:none;border-radius:11px;padding:13px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans','Noto Sans KR',sans-serif;transition:background .2s}
+.confirm-btn:hover{background:var(--navy-light)}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.card{animation:fadeUp .5s ease both}
+.card:nth-child(1){animation-delay:.05s}.card:nth-child(2){animation-delay:.13s}
+.card:nth-child(3){animation-delay:.21s}.card:nth-child(4){animation-delay:.29s}
+.card:nth-child(5){animation-delay:.37s}.card:nth-child(6){animation-delay:.45s}
+
+@media(max-width:680px){
+  nav,.hero,.tabs-bar,.cat-header,.grid,.features,.footer{padding-left:16px!important;padding-right:16px!important}
+  .tabs-bar{overflow-x:auto}
+  .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#"><div class="logo-icon">🚗</div> DriveOn</a>
+  <div class="nav-right">
+    <button class="lang-btn active" onclick="setLang('ko')" id="btn-ko">한국어</button>
+    <button class="lang-btn" onclick="setLang('en')" id="btn-en">English</button>
+    <button class="lang-btn" onclick="setLang('mn')" id="btn-mn">Монгол</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">🇰🇷 <span data-i18n="heroTag"></span></div>
+    <h1><span data-i18n="h1a"></span> <em data-i18n="h1b"></em></h1>
+    <p class="hero-sub" data-i18n="heroSub"></p>
+    <div class="hero-stats">
+      <div><div class="stat-num">6+</div><div class="stat-label" data-i18n="sv"></div></div>
+      <div><div class="stat-num">24/7</div><div class="stat-label" data-i18n="ss"></div></div>
+      <div><div class="stat-num">4.8★</div><div class="stat-label" data-i18n="sr"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TABS -->
+<div class="tabs-bar">
+  <button class="tab-btn active" onclick="filterCat('all')" id="tab-all">🚘 <span data-i18n="tAll"></span></button>
+  <button class="tab-btn" onclick="filterCat('sedan')" id="tab-sedan">🚗 <span data-i18n="tSedan"></span></button>
+  <button class="tab-btn" onclick="filterCat('van')" id="tab-van">🚐 <span data-i18n="tVan"></span></button>
+  <button class="tab-btn" onclick="filterCat('cargo')" id="tab-cargo">🚚 <span data-i18n="tCargo"></span></button>
+</div>
+
+<main>
+<!-- SEDANS -->
+<div class="cat-header" id="sec-sedan"><div class="cat-rule"><span class="cat-label" data-i18n="cSedan"></span></div></div>
+<div class="grid">
+
+  <!-- HYUNDAI SONATA -->
+  <div class="card" data-cat="sedan">
+    <div class="card-photo">
+      <div class="photo-shimmer" id="sh-sonata"></div>
+      <img id="img-sonata" alt="Hyundai Sonata DN8 2023">
+      <div class="photo-error-msg" id="err-sonata"><div class="car-emoji">🚗</div><span>Hyundai Sonata</span></div>
+      <span class="badge badge-sedan">SEDAN</span>
+      <span class="rating-pill"><span class="star">★</span>4.8</span>
+    </div>
+    <div class="card-body">
+      <div class="review-row"><span class="stars">★★★★★</span><span class="review-ct">(284 <span data-i18n="rv"></span>)</span></div>
+      <h3 class="car-name">Hyundai Sonata</h3>
+      <p class="car-sub" data-i18n="sonataSub"></p>
+      <p class="car-desc" data-i18n="sonataDesc"></p>
+      <div class="chips">
+        <span class="chip">⛽ <span data-i18n="gas"></span></span>
+        <span class="chip">🔧 <span data-i18n="auto"></span></span>
+        <span class="chip">👥 5<span data-i18n="seats"></span></span>
+        <span class="chip">❄️ <span data-i18n="ac"></span></span>
+      </div>
+      <div class="card-foot">
+        <div><div class="price-lbl" data-i18n="from"></div><div class="price-val">₩68,000 <span class="price-unit" data-i18n="pd"></span></div></div>
+        <button class="book-btn" onclick="openModal('sonata')"><span data-i18n="book"></span> →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- KIA K8 -->
+  <div class="card" data-cat="sedan">
+    <div class="card-photo">
+      <div class="photo-shimmer" id="sh-k8"></div>
+      <img id="img-k8" alt="Kia K8 2023">
+      <div class="photo-error-msg" id="err-k8"><div class="car-emoji">🚗</div><span>Kia K8</span></div>
+      <span class="badge badge-premium">PREMIUM</span>
+      <span class="rating-pill"><span class="star">★</span>4.9</span>
+    </div>
+    <div class="card-body">
+      <div class="review-row"><span class="stars">★★★★★</span><span class="review-ct">(197 <span data-i18n="rv"></span>)</span></div>
+      <h3 class="car-name">Kia K8</h3>
+      <p class="car-sub" data-i18n="k8Sub"></p>
+      <p class="car-desc" data-i18n="k8Desc"></p>
+      <div class="chips">
+        <span class="chip">⛽ <span data-i18n="hybrid"></span></span>
+        <span class="chip">🔧 <span data-i18n="auto"></span></span>
+        <span class="chip">👥 5<span data-i18n="seats"></span></span>
+        <span class="chip">🛞 AWD</span>
+      </div>
+      <div class="card-foot">
+        <div><div class="price-lbl" data-i18n="from"></div><div class="price-val">₩95,000 <span class="price-unit" data-i18n="pd"></span></div></div>
+        <button class="book-btn" onclick="openModal('k8')"><span data-i18n="book"></span> →</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- VANS -->
+<div class="cat-header" id="sec-van"><div class="cat-rule"><span class="cat-label" data-i18n="cVan"></span></div></div>
+<div class="grid">
+
+  <!-- KIA CARNIVAL -->
+  <div class="card" data-cat="van">
+    <div class="card-photo">
+      <div class="photo-shimmer" id="sh-carnival"></div>
+      <img id="img-carnival" alt="Kia Carnival KA4 2023">
+      <div class="photo-error-msg" id="err-carnival"><div class="car-emoji">🚐</div><span>Kia Carnival</span></div>
+      <span class="badge badge-van">MPV</span>
+      <span class="rating-pill"><span class="star">★</span>4.7</span>
+    </div>
+    <div class="card-body">
+      <div class="review-row"><span class="stars">★★★★</span><span style="color:#ccc;font-size:13px">★</span><span class="review-ct" style="margin-left:7px">(342 <span data-i18n="rv"></span>)</span></div>
+      <h3 class="car-name">Kia Carnival</h3>
+      <p class="car-sub" data-i18n="carnivalSub"></p>
+      <p class="car-desc" data-i18n="carnivalDesc"></p>
+      <div class="chips">
+        <span class="chip">⛽ <span data-i18n="diesel"></span></span>
+        <span class="chip">🔧 <span data-i18n="auto"></span></span>
+        <span class="chip">👥 9<span data-i18n="seats"></span></span>
+        <span class="chip">🚪 <span data-i18n="slide"></span></span>
+      </div>
+      <div class="card-foot">
+        <div><div class="price-lbl" data-i18n="from"></div><div class="price-val">₩110,000 <span class="price-unit" data-i18n="pd"></span></div></div>
+        <button class="book-btn" onclick="openModal('carnival')"><span data-i18n="book"></span> →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HYUNDAI STARIA -->
+  <div class="card" data-cat="van">
+    <div class="card-photo">
+      <div class="photo-shimmer" id="sh-staria"></div>
+      <img id="img-staria" alt="Hyundai Staria 2023">
+      <div class="photo-error-msg" id="err-staria"><div class="car-emoji">🚐</div><span>Hyundai Staria</span></div>
+      <span class="badge badge-van">VAN</span>
+      <span class="rating-pill"><span class="star">★</span>4.8</span>
+    </div>
+    <div class="card-body">
+      <div class="review-row"><span class="stars">★★★★★</span><span class="review-ct">(211 <span data-i18n="rv"></span>)</span></div>
+      <h3 class="car-name">Hyundai Staria</h3>
+      <p class="car-sub" data-i18n="stariaSub"></p>
+      <p class="car-desc" data-i18n="stariaDesc"></p>
+      <div class="chips">
+        <span class="chip">⛽ <span data-i18n="gas"></span></span>
+        <span class="chip">🔧 <span data-i18n="auto"></span></span>
+        <span class="chip">👥 11<span data-i18n="seats"></span></span>
+        <span class="chip">🌟 <span data-i18n="prem"></span></span>
+      </div>
+      <div class="card-foot">
+        <div><div class="price-lbl" data-i18n="from"></div><div class="price-val">₩130,000 <span class="price-unit" data-i18n="pd"></span></div></div>
+        <button class="book-btn" onclick="openModal('staria')"><span data-i18n="book"></span> →</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CARGO -->
+<div class="cat-header" id="sec-cargo"><div class="cat-rule"><span class="cat-label" data-i18n="cCargo"></span></div></div>
+<div class="grid" style="padding-bottom:56px">
+
+  <!-- HYUNDAI PORTER II -->
+  <div class="card" data-cat="cargo">
+    <div class="card-photo">
+      <div class="photo-shimmer" id="sh-porter"></div>
+      <img id="img-porter" alt="Hyundai Porter II 2022">
+      <div class="photo-error-msg" id="err-porter"><div class="car-emoji">🚚</div><span>Hyundai Porter II</span></div>
+      <span class="badge badge-cargo">PORTER</span>
+      <span class="rating-pill"><span class="star">★</span>4.6</span>
+    </div>
+    <div class="card-body">
+      <div class="review-row"><span class="stars">★★★★</span><span style="color:#ccc;font-size:13px">★</span><span class="review-ct" style="margin-left:7px">(518 <span data-i18n="rv"></span>)</span></div>
+      <h3 class="car-name">Hyundai Porter II</h3>
+      <p class="car-sub" data-i18n="porterSub"></p>
+      <p class="car-desc" data-i18n="porterDesc"></p>
+      <div class="chips">
+        <span class="chip">⛽ <span data-i18n="diesel"></span></span>
+        <span class="chip">🔧 <span data-i18n="manAuto"></span></span>
+        <span class="chip">📦 1<span data-i18n="ton"></span></span>
+        <span class="chip">📏 <span data-i18n="porterBed"></span></span>
+      </div>
+      <div class="card-foot">
+        <div><div class="price-lbl" data-i18n="from"></div><div class="price-val">₩75,000 <span class="price-unit" data-i18n="pd"></span></div></div>
+        <button class="book-btn" onclick="openModal('porter')"><span data-i18n="book"></span> →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- KIA BONGO III -->
+  <div class="card" data-cat="cargo">
+    <div class="card-photo">
+      <div class="photo-shimmer" id="sh-bongo"></div>
+      <img id="img-bongo" alt="Kia Bongo III">
+      <div class="photo-error-msg" id="err-bongo"><div class="car-emoji">🚚</div><span>Kia Bongo III</span></div>
+      <span class="badge badge-cargo">BONGO</span>
+      <span class="rating-pill"><span class="star">★</span>4.7</span>
+    </div>
+    <div class="card-body">
+      <div class="review-row"><span class="stars">★★★★</span><span style="color:#ccc;font-size:13px">★</span><span class="review-ct" style="margin-left:7px">(463 <span data-i18n="rv"></span>)</span></div>
+      <h3 class="car-name">Kia Bongo III</h3>
+      <p class="car-sub" data-i18n="bongoSub"></p>
+      <p class="car-desc" data-i18n="bongoDesc"></p>
+      <div class="chips">
+        <span class="chip">⛽ <span data-i18n="diesel"></span></span>
+        <span class="chip">🔧 <span data-i18n="manAuto"></span></span>
+        <span class="chip">📦 1.4<span data-i18n="ton"></span></span>
+        <span class="chip">🔩 <span data-i18n="bongoBed"></span></span>
+      </div>
+      <div class="card-foot">
+        <div><div class="price-lbl" data-i18n="from"></div><div class="price-val">₩82,000 <span class="price-unit" data-i18n="pd"></span></div></div>
+        <button class="book-btn" onclick="openModal('bongo')"><span data-i18n="book"></span> →</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="features-grid">
+    <div class="feat"><div class="feat-icon">🛡️</div><div class="feat-title" data-i18n="f1t"></div><div class="feat-desc" data-i18n="f1d"></div></div>
+    <div class="feat"><div class="feat-icon">📍</div><div class="feat-title" data-i18n="f2t"></div><div class="feat-desc" data-i18n="f2d"></div></div>
+    <div class="feat"><div class="feat-icon">📞</div><div class="feat-title" data-i18n="f3t"></div><div class="feat-desc" data-i18n="f3d"></div></div>
+    <div class="feat"><div class="feat-icon">💳</div><div class="feat-title" data-i18n="f4t"></div><div class="feat-desc" data-i18n="f4d"></div></div>
+    <div class="feat"><div class="feat-icon">🔑</div><div class="feat-title" data-i18n="f5t"></div><div class="feat-desc" data-i18n="f5d"></div></div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">🚗 DriveOn 렌터카</div>
+        <div class="footer-tagline" data-i18n="ftag"></div>
+      </div>
+      <div class="footer-contact">
+        <h4 data-i18n="fcontact"></h4>
+        <div class="contact-row">📞 1588-0000</div>
+        <div class="contact-row">✉️ info@driveon.co.kr</div>
+        <div class="contact-row">📍 <span data-i18n="faddr"></span></div>
+        <div class="contact-row">⏰ <span data-i18n="fhours"></span></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2024 DriveOn 렌터카. <span data-i18n="frights"></span></span>
+      <div class="footer-links"><a href="#" data-i18n="fprivacy"></a><a href="#" data-i18n="fterms"></a></div>
+    </div>
+  </div>
+</footer>
+
+<!-- BOOKING MODAL -->
+<div class="overlay" id="overlay" onclick="closeModalBg(event)">
+  <div class="modal">
+    <div class="modal-head">
+      <span class="modal-title" id="modal-title"></span>
+      <button class="modal-x" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <img id="modal-img" class="modal-img" src="" alt="">
+      <div class="info-grid" id="modal-info"></div>
+      <button class="confirm-btn" id="confirm-btn"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── IMAGE DATA ─────────────────────────────────────────────────────────────
+// Each vehicle has a list of fallback image sources (tried in order in the browser)
+// ─── VEHICLE IMAGE SOURCES ──────────────────────────────────────────────────
+// Real vehicle photos sourced directly from:
+//   • Hyundai Sonata: Edmunds OEM press photos (media.ed.edmunds-media.com)
+//   • Hyundai Porter II: corea-auto.com Korean dealer photos (static.wixstatic.com)
+//   • Kia Bongo III: corea-auto.com Korean dealer photos (static.wixstatic.com)
+//   • K8 / Carnival / Staria: Wikimedia Commons CC-licensed photos
+// Each array lists URLs tried in sequence; first to load wins.
+
+const IMGS = {
+  // ── HYUNDAI SONATA DN8 ─────────────────────────────────────────────────────
+  // OEM press photos from Edmunds — Hyundai Sonata Limited sedan (DN8 body)
+  sonata: [
+    'https://media.ed.edmunds-media.com/hyundai/sonata/2021/oem/2021_hyundai_sonata_sedan_limited_fq_oem_1_500.jpg',
+    'https://media.ed.edmunds-media.com/hyundai/sonata/2021/oem/2021_hyundai_sonata_sedan_limited_fq_oem_2_500.jpg',
+    'https://media.ed.edmunds-media.com/hyundai/sonata/2021/oem/2021_hyundai_sonata_sedan_limited_fq_oem_3_500.jpg',
+    'https://media.ed.edmunds-media.com/hyundai/sonata/2021/oem/2021_hyundai_sonata_sedan_n-line_fq_oem_1_500.jpg',
+    // Wikimedia Commons fallback
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/0_Hyundai_Sonata_%28DN8%29_fl_1.jpg/900px-0_Hyundai_Sonata_%28DN8%29_fl_1.jpg',
+  ],
+
+  // ── KIA K8 ─────────────────────────────────────────────────────────────────
+  // Wikimedia Commons — Kia K8 Hybrid GL3 HEV, white (MD5: 06...)
+  k8: [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Kia_K8_Hybrid_GL3_HEV_white_%281%29.jpg/900px-Kia_K8_Hybrid_GL3_HEV_white_%281%29.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/0/06/Kia_K8_Hybrid_GL3_HEV_white_%281%29.jpg',
+  ],
+
+  // ── KIA CARNIVAL KA4 ───────────────────────────────────────────────────────
+  // Wikimedia Commons — Kia Carnival Hybrid KA4 Snow White Pearl (MD5: f6...)
+  carnival: [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Kia_Carnival_Hybrid_KA4_PE_HEV_Snow_White_Pearl_%285%29.jpg/900px-Kia_Carnival_Hybrid_KA4_PE_HEV_Snow_White_Pearl_%285%29.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/f/f6/Kia_Carnival_Hybrid_KA4_PE_HEV_Snow_White_Pearl_%285%29.jpg',
+  ],
+
+  // ── HYUNDAI STARIA ─────────────────────────────────────────────────────────
+  // Wikimedia Commons — Hyundai Staria Tourer US4 Creamy White (MD5: 55...)
+  staria: [
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Hyundai_Staria_Tourer_US4_Creamy_White_%281%29.jpg/900px-Hyundai_Staria_Tourer_US4_Creamy_White_%281%29.jpg',
+    'https://upload.wikimedia.org/wikipedia/commons/5/55/Hyundai_Staria_Tourer_US4_Creamy_White_%281%29.jpg',
+  ],
+
+  // ── HYUNDAI PORTER II ──────────────────────────────────────────────────────
+  // Real photos from corea-auto.com (Korean dealer), actual Porter II trucks in Korea
+  // Photo hash: 01189d_7154fd5564d04638a4d727d0b090ee1c
+  porter: [
+    'https://static.wixstatic.com/media/01189d_7154fd5564d04638a4d727d0b090ee1c~mv2.jpg/v1/fill/w_980,h_735,al_c,q_85,enc_auto/01189d_7154fd5564d04638a4d727d0b090ee1c~mv2.jpg',
+    'https://static.wixstatic.com/media/01189d_7154fd5564d04638a4d727d0b090ee1c~mv2.jpg',
+    'https://static.wixstatic.com/media/01189d_3e8be9a975bb4d49811dc644edd8cb78~mv2.jpg',
+    'https://static.wixstatic.com/media/01189d_0a2f7eb9004d4c9db74fb3fa23f77a79~mv2.jpg',
+    // Wikimedia Commons fallback
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/00_hyundai_porter_003.jpg/900px-00_hyundai_porter_003.jpg',
+  ],
+
+  // ── KIA BONGO III ──────────────────────────────────────────────────────────
+  // Real photos from corea-auto.com (Korean dealer), actual Bongo III trucks in Korea
+  // Photo hash: 01189d_87fcfadd1dda455aaad3f65dec8ae748
+  bongo: [
+    'https://static.wixstatic.com/media/01189d_87fcfadd1dda455aaad3f65dec8ae748~mv2.jpg/v1/fill/w_980,h_735,al_c,q_85,enc_auto/01189d_87fcfadd1dda455aaad3f65dec8ae748~mv2.jpg',
+    'https://static.wixstatic.com/media/01189d_87fcfadd1dda455aaad3f65dec8ae748~mv2.jpg',
+    'https://static.wixstatic.com/media/01189d_24b90602b2354452a842e5ccc0d15187~mv2.jpg',
+    'https://static.wixstatic.com/media/01189d_25821ef593b6474289ff171fdd2a7aa6~mv2.jpg',
+    // Wikimedia Commons fallback
+    'https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Kia_Bongo_III_flatbed_truck.jpg/900px-Kia_Bongo_III_flatbed_truck.jpg',
+  ],
+};
+
+// Smart image loader: tries each URL in sequence until one loads
+function loadImg(id) {
+  const sources = IMGS[id];
+  const imgEl = document.getElementById('img-' + id);
+  const shimmer = document.getElementById('sh-' + id);
+  const errEl = document.getElementById('err-' + id);
+  let idx = 0;
+
+  function tryNext() {
+    if (idx >= sources.length) {
+      shimmer.style.display = 'none';
+      errEl.style.display = 'flex';
+      return;
+    }
+    const src = sources[idx++];
+    const tester = new Image();
+    tester.onload = function() {
+      imgEl.src = src;
+      shimmer.style.display = 'none';
+      imgEl.classList.add('loaded');
+    };
+    tester.onerror = tryNext;
+    tester.src = src;
+  }
+  tryNext();
+}
+
+// Load all images when page is ready
+window.addEventListener('load', function() {
+  ['sonata','k8','carnival','staria','porter','bongo'].forEach(loadImg);
+});
+
+// Also try loading as soon as DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+  ['sonata','k8','carnival','staria','porter','bongo'].forEach(loadImg);
+});
+
+// ─── TRANSLATIONS ────────────────────────────────────────────────────────────
+const T = {
+ko:{
+  heroTag:'대한민국 공식 렌터카 서비스',h1a:'어디든 달려가는',h1b:'드라이브온',
+  heroSub:'세단, 다인승 밴, 포터 화물트럭까지 — 여행·이사·배달 모든 상황에 맞는 최적의 차량을 합리적인 가격에 제공합니다.',
+  sv:'차량 보유',ss:'고객 지원',sr:'평균 평점',
+  tAll:'전체 차량',tSedan:'승용차',tVan:'다인승 밴',tCargo:'화물 트럭',
+  cSedan:'승용차 (세단)',cVan:'다인승 차량 (밴 / 미니밴)',cCargo:'포터 화물 트럭',
+  rv:'리뷰',seats:'인승',ac:'에어컨',slide:'슬라이딩 도어',prem:'프리미엄',ton:'톤',
+  from:'하루 기준',pd:'/ 일',book:'예약하기',
+  auto:'자동',manAuto:'수/자동',diesel:'디젤',gas:'가솔린',hybrid:'하이브리드',
+  sonataSub:'2023 · DN8 · 1.6T 가솔린',
+  sonataDesc:'현대 쏘나타는 대한민국 대표 중형 세단으로, 스마트센스 안전기술·10.25인치 인포테인먼트·열선시트가 기본 탑재됩니다. 넓은 실내와 우수한 연비로 출장 및 가족 여행 모두에 최적입니다.',
+  k8Sub:'2023 · GL3 · 3.5 V6 / 하이브리드',
+  k8Desc:'기아 K8은 파노라믹 선루프·나파 가죽 시트·빌트인 캠 3.0·차로 유지 보조를 갖춘 플래그십 럭셔리 세단입니다. AWD 옵션 탑재 가능한 프리미엄 비즈니스 이동의 최선책입니다.',
+  carnivalSub:'2023 · KA4 · 2.2 CRDi 디젤',
+  carnivalDesc:'최대 9인 탑승, 파워 슬라이딩 도어, 독립 공조, VIP 릴랙션 시트 옵션으로 단체 이동·공항 픽업·가족 여행에 최적화된 대한민국 최인기 미니밴입니다.',
+  stariaSub:'2023 · US4 · 2.5 가솔린 터보',
+  stariaDesc:'최대 11인 탑승의 미래 지향적 프리미엄 대형 밴으로, 캡슐형 독립 시트와 파노라믹 루프 창문을 갖추고 있습니다. 공항 픽업·기업 셔틀·단체 관광에 이상적입니다.',
+  porterSub:'2022 · 포터 II · 2.5 디젤',
+  porterDesc:'대한민국 소형 화물 판매 1위 차량. 1톤 적재·적재함 2.7m로 이사·소형 배달·건자재 운반에 최적화되어 있으며 도심 협로에서도 기동성이 뛰어납니다.',
+  porterBed:'적재함 2.7m',
+  bongoSub:'2022 · 봉고 III · 2.5 디젤',
+  bongoDesc:'1.4톤 적재의 신뢰성 높은 화물 트럭으로 포터보다 넓은 적재함과 강화 섀시를 갖추고 있습니다. 냉동탑차·특장차 등 다양한 커스텀 구성이 가능합니다.',
+  bongoBed:'특장 가능',
+  f1t:'완전 보험 포함',f1d:'모든 차량에 자차 손해 및 대인·대물 보험이 기본 포함됩니다.',
+  f2t:'전국 픽업/반납',f2d:'서울 및 전국 주요 도시에서 픽업과 반납이 가능합니다.',
+  f3t:'24시간 고객 지원',f3d:'한국어·영어·몽골어로 24시간 365일 지원합니다.',
+  f4t:'간편 결제',f4d:'카카오페이, 신용카드, 계좌이체 등 다양한 결제 수단을 지원합니다.',
+  f5t:'빠른 차량 인도',f5d:'예약 확정 후 1시간 이내에 차량을 인도받을 수 있습니다.',
+  ftag:'대한민국 전역 최고의 렌터카 서비스. 여행, 비즈니스, 배달 모두 OK.',
+  fcontact:'연락처',faddr:'서울특별시 강남구 테헤란로 123',fhours:'영업시간 08:00 – 22:00',
+  frights:'모든 권리 보유.',fprivacy:'개인정보처리방침',fterms:'이용약관',
+  confirmBook:'예약 확정하기',
+  mpickup:'픽업 위치',mreturn:'반납 위치',mprice:'1일 요금',mcap:'탑승 인원',mpay:'결제 방식',
+  manywhere:'전국 어디서나',mpayopt:'카드 / 카카오페이',
+},
+en:{
+  heroTag:'Official Car Rental – South Korea',h1a:'Drive Anywhere',h1b:'in Korea',
+  heroSub:'Sedans, multi-passenger vans, and Porter cargo trucks — find the perfect vehicle for travel, moving, or delivery at great rates.',
+  sv:'Vehicles',ss:'Support',sr:'Avg. Rating',
+  tAll:'All Vehicles',tSedan:'Sedans',tVan:'Vans / MPVs',tCargo:'Cargo Trucks',
+  cSedan:'Passenger Cars (Sedans)',cVan:'Multi-Passenger Vehicles',cCargo:'Porter Cargo / Delivery Trucks',
+  rv:'reviews',seats:' seats',ac:'A/C',slide:'Sliding Door',prem:'Premium',ton:' ton',
+  from:'Starting From',pd:'/ day',book:'Book Now',
+  auto:'Automatic',manAuto:'Man / Auto',diesel:'Diesel',gas:'Gasoline',hybrid:'Hybrid',
+  sonataSub:'2023 · DN8 Gen 8 · 1.6T Gasoline',
+  sonataDesc:"South Korea's iconic mid-size sedan. Standard SmartSense safety, 10.25\" infotainment, heated seats, and excellent fuel economy. Perfect for business trips and family travel alike.",
+  k8Sub:'2023 · GL3 · 3.5 V6 / Hybrid',
+  k8Desc:"Kia's flagship luxury sedan with panoramic sunroof, Nappa leather, Built-in Cam 3.0, and lane-keep assist. Optional AWD available. The definitive choice for premium business travel.",
+  carnivalSub:'2023 · KA4 · 2.2 CRDi Diesel',
+  carnivalDesc:"South Korea's most beloved minivan seats up to 9 with power sliding doors, independent climate zones, and optional VIP relaxation seats. Perfect for groups, airport transfers, and family trips.",
+  stariaSub:'2023 · US4 · 2.5 Gasoline Turbo',
+  stariaDesc:'Futuristic premium large van seating up to 11. Features capsule-style seats and panoramic roof windows. Ideal for airport shuttles, corporate transport, and group tours.',
+  porterSub:'2022 · Porter II · 2.5 Diesel',
+  porterDesc:"South Korea's #1 light cargo truck. 1-ton capacity and 2.7m flatbed — ideal for moving, small deliveries, and construction materials. Durable and agile in tight urban streets.",
+  porterBed:'2.7m Flatbed',
+  bongoSub:'2022 · Bongo III · 2.5 Diesel',
+  bongoDesc:'Reliable 1.4-ton cargo truck with wider loadbed and reinforced chassis for heavier freight than the Porter. Customizable for refrigerated, flatbed, or specialty configurations.',
+  bongoBed:'Customizable',
+  f1t:'Full Insurance Included',f1d:'All vehicles include comprehensive collision and liability insurance.',
+  f2t:'Nationwide Pickup',f2d:'Pick up and return anywhere in Seoul and major Korean cities.',
+  f3t:'24/7 Customer Support',f3d:'Round-the-clock support in Korean, English, and Mongolian.',
+  f4t:'Easy Payment',f4d:'Credit cards, KakaoPay, and bank transfer all accepted.',
+  f5t:'Fast Delivery',f5d:'Receive your vehicle within 1 hour of booking confirmation.',
+  ftag:'Premium car rental across South Korea. Travel, business, or delivery — covered.',
+  fcontact:'Contact Us',faddr:'123 Teheran-ro, Gangnam-gu, Seoul',fhours:'Hours: 08:00 – 22:00',
+  frights:'All rights reserved.',fprivacy:'Privacy Policy',fterms:'Terms of Service',
+  confirmBook:'Confirm Booking',
+  mpickup:'Pickup Location',mreturn:'Return Location',mprice:'Daily Rate',mcap:'Capacity',mpay:'Payment',
+  manywhere:'Anywhere in Korea',mpayopt:'Card / KakaoPay',
+},
+mn:{
+  heroTag:'Солонгос улсын тээврийн хэрэгслийн түрээс',h1a:'Хаашаа ч явдаг',h1b:'ДрайвОн',
+  heroSub:'Седан, олон суудалт ван, Портер ачааны машин — аялал, нүүдэл, хүргэлт бүхэнд тохирсон машиныг боломжийн үнэтэй.',
+  sv:'Машин',ss:'Дэмжлэг',sr:'Дундаж үнэлгээ',
+  tAll:'Бүх машин',tSedan:'Седан',tVan:'Ван / Минибус',tCargo:'Ачааны машин',
+  cSedan:'Зорчигч тээврийн машин (Седан)',cVan:'Олон суудалт тээврийн хэрэгсэл',cCargo:'Портер ачааны / хүргэлтийн машин',
+  rv:'сэтгэгдэл',seats:' суудал',ac:'Агаар хөргөлт',slide:'Гулсдаг хаалга',prem:'Прэмиум',ton:' тонн',
+  from:'Эхлэх үнэ',pd:'/ өдөр',book:'Захиалах',
+  auto:'Автомат',manAuto:'Гар / Авт',diesel:'Дизель',gas:'Бензин',hybrid:'Гибрид',
+  sonataSub:'2023 · DN8 · 1.6T Бензин',
+  sonataDesc:'Солонгосын тэргүүлэх дунд зэргийн седан. SmartSense аюулгүй байдал, 10.25 инчийн дэлгэц, халаалттай суудал. Бизнес болон гэр бүлийн аялалд маш тохиромжтой.',
+  k8Sub:'2023 · GL3 · 3.5 V6 / Гибрид',
+  k8Desc:'Панорамик дээвэр, Наппа арьсан суудал, Built-in Cam 3.0, хаалга хадгалах тусламжтай Kia-гийн флагманы тансаг машин. AWD сонголттой тансаг бизнес зорчлогод хамгийн тохиромжтой.',
+  carnivalSub:'2023 · KA4 · 2.2 CRDi Дизель',
+  carnivalDesc:'9 хүн суудаг, цахилгаан гулсдаг хаалга, бие даасан агааржуулалт, VIP суудлын сонголттой Солонгосын хамгийн алдартай миниван. Бүлгийн аялал болон нисэх онгоцны буудалд тохиромжтой.',
+  stariaSub:'2023 · US4 · 2.5 Бензин Турбо',
+  stariaDesc:'11 хүн суудаг, ирээдүйлэг загвартай тансаг том ван. Тусдаа капсул суудал, панорамик дээврийн цонхтой. Нисэх онгоцны буудлын шилжүүлэг болон корпорацийн тээварт хамгийн тохиромжтой.',
+  porterSub:'2022 · Портер II · 2.5 Дизель',
+  porterDesc:'Солонгосын жижиг ачааны тээврийн №1 машин. 1 тонн даац, 2.7 м тавцан — нүүдэл, хүргэлт, барилгын материал зөөлтөд хамгийн сайн.',
+  porterBed:'2.7м тавцан',
+  bongoSub:'2022 · Бонго III · 2.5 Дизель',
+  bongoDesc:'1.4 тонн даацтай, Портероос өргөн тавцантай найдвартай ачааны машин. Хөргөгч, тусгай зориулалтын тавцан гэх мэт янз бүрийн тохиргоо хийх боломжтой.',
+  bongoBed:'Тохируулах боломжтой',
+  f1t:'Бүрэн Даатгал Багтсан',f1d:'Бүх машинд мөргөлдөлт болон хариуцлагын даатгал орсон болно.',
+  f2t:'Улсын хэмжээнд авах',f2d:'Сеул болон томоохон хотуудад хаана ч авах, буцааж өгөх боломжтой.',
+  f3t:'24/7 Дэмжлэг',f3d:'Солонгос, Англи, Монгол хэлээр цагийн турш дэмжлэг үзүүлнэ.',
+  f4t:'Хялбар Төлбөр',f4d:'Кредит карт, KakaoPay болон банкны шилжүүлэг хийх боломжтой.',
+  f5t:'Хурдан Хүргэлт',f5d:'Захиалгын дараа 1 цагт машиныг хүлээж авна.',
+  ftag:'Солонгос улс даяар тансаг машин түрээс. Аялал, бизнес, хүргэлт — бүгдэд бэлэн.',
+  fcontact:'Холбоо барих',faddr:'Сеул хот, Ганньам-гу 123',fhours:'Цагийн хуваарь: 08:00 – 22:00',
+  frights:'Бүх эрх хамгаалагдсан.',fprivacy:'Нууцлалын бодлого',fterms:'Үйлчилгээний нөхцөл',
+  confirmBook:'Захиалгыг баталгаажуулах',
+  mpickup:'Авах газар',mreturn:'Буцааж өгөх газар',mprice:'Өдрийн үнэ',mcap:'Суудлын тоо',mpay:'Төлбөр',
+  manywhere:'Улс даяар хаана ч',mpayopt:'Карт / KakaoPay',
+},
+};
+
+let lang = 'ko';
+
+const vehiclePrices = {
+  sonata:{price:'₩68,000',seats:'5'},k8:{price:'₩95,000',seats:'5'},
+  carnival:{price:'₩110,000',seats:'9'},staria:{price:'₩130,000',seats:'11'},
+  porter:{price:'₩75,000',seats:'3'},bongo:{price:'₩82,000',seats:'3'},
+};
+const vehicleNames = {
+  sonata:'Hyundai Sonata',k8:'Kia K8',carnival:'Kia Carnival',
+  staria:'Hyundai Staria',porter:'Hyundai Porter II',bongo:'Kia Bongo III',
+};
+
+function setLang(l) {
+  lang = l;
+  ['ko','en','mn'].forEach(x => document.getElementById('btn-'+x).classList.toggle('active', x===l));
+  document.documentElement.lang = l;
+  applyT();
+}
+
+function applyT() {
+  const t = T[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (t[k] !== undefined) el.textContent = t[k];
+  });
+}
+
+function filterCat(cat) {
+  ['all','sedan','van','cargo'].forEach(c => document.getElementById('tab-'+c).classList.toggle('active', c===cat));
+  document.querySelectorAll('.card').forEach(card => {
+    card.closest('.grid').style.display = '';
+    card.style.display = (cat==='all' || card.dataset.cat===cat) ? '' : 'none';
+  });
+  ['sedan','van','cargo'].forEach(c => {
+    const show = cat==='all' || cat===c;
+    document.getElementById('sec-'+c).style.display = show ? '' : 'none';
+    document.querySelectorAll(`.grid [data-cat="${c}"]`).forEach(card => {
+      const grid = card.closest('.grid');
+      const visible = [...grid.querySelectorAll('.card')].some(x => x.style.display !== 'none');
+      grid.style.display = visible ? '' : 'none';
+    });
+  });
+}
+
+function openModal(id) {
+  const t = T[lang];
+  const v = vehiclePrices[id];
+  document.getElementById('modal-title').textContent = vehicleNames[id];
+  const mi = document.getElementById('modal-img');
+  mi.src = (IMGS[id] && IMGS[id][0]) || '';
+  document.getElementById('modal-info').innerHTML = `
+    <div class="info-cell"><div class="info-lbl">${t.mpickup}</div><div class="info-val">${t.manywhere}</div></div>
+    <div class="info-cell"><div class="info-lbl">${t.mreturn}</div><div class="info-val">${t.manywhere}</div></div>
+    <div class="info-cell"><div class="info-lbl">${t.mprice}</div><div class="info-val">${v.price}</div></div>
+    <div class="info-cell"><div class="info-lbl">${t.mcap}</div><div class="info-val">${v.seats}${t.seats}</div></div>
+    <div class="info-cell" style="grid-column:1/-1"><div class="info-lbl">${t.mpay}</div><div class="info-val">${t.mpayopt}</div></div>
+  `;
+  document.getElementById('confirm-btn').textContent = t.confirmBook;
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() { document.getElementById('overlay').classList.remove('open'); document.body.style.overflow = ''; }
+function closeModalBg(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
+
+applyT();
+</script>
+</body>
+</html>
